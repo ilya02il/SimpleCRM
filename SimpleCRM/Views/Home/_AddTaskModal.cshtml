@@ -1,0 +1,58 @@
+﻿@model TaskModel
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        </div>
+        <div class="modal-body">
+            <form id="creation-form" asp-action="CreateTask" method="post">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label asp-for="Name" class="col-form-label">Название:</label>
+                                <input type="text" asp-for="Name" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Executors" class="col-form-label">Список исполнителей:</label>
+                                <input type="text" asp-for="Executors" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ExecutionTime" class="col-form-label">Время выполнения:</label>
+                                <input type="text" asp-for="ExecutionTime" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="CompletionDate" class="col-form-label">Дата завершения:</label>
+                                <input type="text" asp-for="CompletionDate" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label asp-for="State.Id" class="col-form-label">Статус:</label>
+                                <select class="form-control" asp-for="State.Id">
+                                    <option value="1">Назначена</option>
+                                    <option value="2">Приостановлена</option>
+                                    <option value="3">Выполняется</option>
+                                    <option value="4">Завершена</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="PlannedIntensity" class="col-form-label">Плановая трудоемкость:</label>
+                                <input type="text" asp-for="PlannedIntensity" class="form-control">
+                            </div>
+                            <div class="mb-3 mh-100">
+                                <label asp-for="Description" class="col-form-label">Описание:</label>
+                                <textarea asp-for="Description" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            <button type="button"  class="btn btn-primary" onclick="CreateTask('creation-form')">Добавить</button>
+        </div>
+    </div>
+</div>

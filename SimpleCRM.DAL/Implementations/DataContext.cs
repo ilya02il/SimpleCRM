@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SimpleCRM.DAL.Entities;
 
 namespace SimpleCRM.DAL.Implementations
@@ -9,26 +7,21 @@ namespace SimpleCRM.DAL.Implementations
 	{
 
 		public DbSet<TaskEntity> Tasks { get; set; }
-		public DbSet<SubtaskEntity> Subtasks { get; set; }
+		//public DbSet<SubtaskEntity> Subtasks { get; set; }
 		public DbSet<StateEntity> States { get; set; }
 		
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
 		{
 		}
 
-		public async Task<int> SaveChangesAsync()
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			return await base.SaveChangesAsync();
-		}
-
-		public DbSet<T> DbSet<T>() where T : class
-		{
-			return Set<T>();
-		}
-
-		public new IQueryable<T> Query<T>() where T : class
-		{
-			return Set<T>();
+			modelBuilder.Entity<StateEntity>().HasData(
+				new StateEntity { Id = 1, Status = "Assigned" },
+				new StateEntity { Id = 2, Status = "InProgress" },
+				new StateEntity { Id = 3, Status = "Paused" },
+				new StateEntity { Id = 4, Status = "Finished" }
+				);
 		}
     }
 }

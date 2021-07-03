@@ -39,13 +39,6 @@ namespace SimpleCRM.DAL.Implementations
             await _context.Set<T>().AddRangeAsync(newEntities);
         }
 
-        public async Task Delete<T>(int id) where T : class, IEntity
-        {
-            var activeEntity = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
-            activeEntity.IsActive = false;
-            await Task.Run(() => _context.Update(activeEntity));
-        }
-
         public async Task Remove<T>(T entity) where T : class, IEntity
         {
             await Task.Run(() => _context.Set<T>().Remove(entity));

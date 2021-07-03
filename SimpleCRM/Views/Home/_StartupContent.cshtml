@@ -1,0 +1,58 @@
+﻿@model List<TaskModel>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="common-info">
+            <h2>Общая информация</h2>
+            <div class="common-info__info">
+                Общее количество задач: @Model.Count <br>
+                Суммарное время выполнения: @Model.Sum(task => task.ExecutionTime.Days) дн. @Model.Sum(task => task.ExecutionTime.Hours) час.<br>
+                Суммарная плановые трудозатраты: @Model.Sum(task => task.PlannedIntensity) чел./час
+            </div>
+            <h2>Список задач</h2>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table w-auto">
+            <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">Название</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Время выполнения</th>
+                    <th scope="col">Трудозатраты</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var task in Model)
+                {
+                    <tr>
+                        <th scope="row">@task.Id</th>
+                        <td>@task.Name</td>
+
+                        @switch (task.State.Id)
+                        {
+                            case 1:
+                                <td>Назначена</td>
+                                break;
+                            case 2:
+                                <td>В процессе</td>
+                                break;
+                            case 3:
+                                <td>Приостановлена</td>
+                                break;
+                            case 4:
+                                <td>Завершена</td>
+                                break;
+                        }
+
+                        <td>@task.ExecutionTime.Days дн. @task.ExecutionTime.Hours час. @task.ExecutionTime.Minutes мин.</td>
+                        <td>@task.PlannedIntensity чел./час</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

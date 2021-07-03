@@ -33,39 +33,49 @@ namespace SimpleCRM.DAL.Migrations
                     Description = table.Column<string>(nullable: true),
                     RegistrationDate = table.Column<DateTime>(nullable: false),
                     PlannedIntensity = table.Column<double>(nullable: false),
-                    ExecutionTime = table.Column<DateTime>(nullable: false),
+                    ExecutionTime = table.Column<TimeSpan>(nullable: false),
                     CompletionDate = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    StateId = table.Column<int>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    ParentTaskId = table.Column<int>(nullable: true)
+                    StateId = table.Column<int>(nullable: false),
+                    TaskEntityId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tasks_Tasks_ParentTaskId",
-                        column: x => x.ParentTaskId,
-                        principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Tasks_States_StateId",
                         column: x => x.StateId,
                         principalTable: "States",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Tasks_TaskEntityId",
+                        column: x => x.TaskEntityId,
+                        principalTable: "Tasks",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_ParentTaskId",
-                table: "Tasks",
-                column: "ParentTaskId");
+            migrationBuilder.InsertData(
+                table: "States",
+                columns: new[] { "Id", "IsActive", "Status" },
+                values: new object[,]
+                {
+                    { 1, false, "Assigned" },
+                    { 2, false, "InProgress" },
+                    { 3, false, "Paused" },
+                    { 4, false, "Finished" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_StateId",
                 table: "Tasks",
                 column: "StateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_TaskEntityId",
+                table: "Tasks",
+                column: "TaskEntityId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

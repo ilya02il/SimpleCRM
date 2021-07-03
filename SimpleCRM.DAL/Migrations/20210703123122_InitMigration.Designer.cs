@@ -10,7 +10,7 @@ using SimpleCRM.DAL.Implementations;
 namespace SimpleCRM.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210628102922_InitMigration")]
+    [Migration("20210703123122_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,13 @@ namespace SimpleCRM.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("States");
+
+                    b.HasData(
+                        new { Id = 1, IsActive = false, Status = "Assigned" },
+                        new { Id = 2, IsActive = false, Status = "InProgress" },
+                        new { Id = 3, IsActive = false, Status = "Paused" },
+                        new { Id = 4, IsActive = false, Status = "Finished" }
+                    );
                 });
 
             modelBuilder.Entity("SimpleCRM.DAL.Entities.TaskEntity", b =>
@@ -46,10 +53,7 @@ namespace SimpleCRM.DAL.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<DateTime>("ExecutionTime");
+                    b.Property<TimeSpan>("ExecutionTime");
 
                     b.Property<string>("Executors");
 
@@ -61,42 +65,30 @@ namespace SimpleCRM.DAL.Migrations
 
                     b.Property<DateTime>("RegistrationDate");
 
-                    b.Property<int?>("StateId");
+                    b.Property<int?>("StateId")
+                        .IsRequired();
+
+                    b.Property<int?>("TaskEntityId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("StateId");
 
+                    b.HasIndex("TaskEntityId");
+
                     b.ToTable("Tasks");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("TaskEntity");
-                });
-
-            modelBuilder.Entity("SimpleCRM.DAL.Entities.SubtaskEntity", b =>
-                {
-                    b.HasBaseType("SimpleCRM.DAL.Entities.TaskEntity");
-
-                    b.Property<int?>("ParentTaskId");
-
-                    b.HasIndex("ParentTaskId");
-
-                    b.ToTable("SubtaskEntity");
-
-                    b.HasDiscriminator().HasValue("SubtaskEntity");
                 });
 
             modelBuilder.Entity("SimpleCRM.DAL.Entities.TaskEntity", b =>
                 {
                     b.HasOne("SimpleCRM.DAL.Entities.StateEntity", "State")
                         .WithMany("Tasks")
-                        .HasForeignKey("StateId");
-                });
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity("SimpleCRM.DAL.Entities.SubtaskEntity", b =>
-                {
-                    b.HasOne("SimpleCRM.DAL.Entities.TaskEntity", "ParentTask")
+                    b.HasOne("SimpleCRM.DAL.Entities.TaskEntity")
                         .WithMany("Subtasks")
-                        .HasForeignKey("ParentTaskId");
+                        .HasForeignKey("TaskEntityId");
                 });
 #pragma warning restore 612, 618
         }
