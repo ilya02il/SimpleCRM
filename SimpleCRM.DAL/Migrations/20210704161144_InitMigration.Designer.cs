@@ -10,7 +10,7 @@ using SimpleCRM.DAL.Implementations;
 namespace SimpleCRM.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210704141837_InitMigration")]
+    [Migration("20210704161144_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

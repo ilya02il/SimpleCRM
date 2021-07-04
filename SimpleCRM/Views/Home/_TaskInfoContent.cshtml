@@ -1,40 +1,46 @@
-﻿@using Microsoft.AspNetCore.Html
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
 @model TaskModel
 
 <div clas="row">
     <div class="common-info d-flex">
-        <div class="col-lg-7">
-            <h2>Общая информация</h2>
+        <div class="col-lg-8">
+            <h2>@Localizer["CommonInfoTitle1"]</h2>
             <div class="common-info__info">
-                Название задачи: @Model.Name<br>
-                Статус: @*@Model.State.Status*@<br>
-                Исполнители: @Model.Executors<br>
-                Плановая трудоемкость: @Model.PlannedIntensity<br>
-                @*Время выполнения: @Model.ExecutionTime.Days + @Model.Subtasks.Sum(subtask => subtask.ExecutionTime.Days) дн.
-            @Model.ExecutionTime.Hours + @Model.Subtasks.Sum(subtask => subtask.ExecutionTime.Hours) час.<br>*@
-                Дата регистрации в системе: @Model.RegistrationDate.ToShortDateString()<br>
-                Дата завершения: @Model.CompletionDate.ToShortDateString()<br>
-                Описание задачи: @Model.Description<br>
+                @Localizer["CommonInfoName"] @Model.Name<br>
+                @Localizer["CommonInfoStatus"] @Model.State.Status<br>
+                @Localizer["CommonInfoExecutors"] @Model.Executors<br>
+                @Localizer["CommonInfoIntensity"] @Model.Subtasks.Aggregate(Model.PlannedIntensity, (current, subtask) => current + subtask.PlannedIntensity)<br>
+                @Localizer["CommonInfoExecutionTime"]
+                @{
+                    var commonExecutionTime = Model.Subtasks.Aggregate(Model.ExecutionTime, (current, subtask) => current + subtask.ExecutionTime);
+
+                    <div>@commonExecutionTime.Days @Localizer["Day"] @commonExecutionTime.Hours @Localizer["Hour"] @commonExecutionTime.Minutes @Localizer["Minutes"]</div>
+                }
+                @Localizer["CommonInfoRegDate"] @Model.RegistrationDate.ToShortDateString()<br>
+                @Localizer["CommonInfoComplDate"] @Model.CompletionDate.ToShortDateString()<br>
+                @Localizer["CommonInfoDescription"] @Model.Description<br>
             </div>
         </div>
-        <div class="col-lg-5">
-            <button id="editTaskButton" class="btn btn-outline-primary m-2 float-right" data-toggle="modal" data-target="#editTaskModal">Редактировать</button>
+        <div class="col-lg-4">
+            <button id="editTaskButton" class="btn btn-outline-primary m-2 float-right" data-toggle="modal" data-target="#editTaskModal">@Localizer["EditBtnTitle"]</button>
             <div id="editTaskModal" class="modal fade">
                 @await Html.PartialAsync("_EditTaskModal", Model)
             </div>
-            <button id="deleteTaskButton" class="btn btn-primary m-2 float-right" onclick="deleteTask(@Model.Id)">Удалить</button>
+            <button id="deleteTaskButton" class="btn btn-primary m-2 float-right" onclick="deleteTask(@Model.Id)">@Localizer["DeleteBtnTitle"]</button>
         </div>
     </div>
 </div>
 <div clas="row">
     <div class="common-info d-flex">
-        <div class="col-lg-7">
-            <h2>Список подзадач</h2>
+        <div class="col-lg-8">
+            <h2>@Localizer["CommonInfoTitle2"]</h2>
         </div>
-        <div class="col-lg-5">
-            <button class="btn btn-primary m-2 float-right" data-toggle="modal" data-target="#addTaskModal" data-whatever="Добавление подзадачи">Добавить подзадачу</button>
+        <div class="col-lg-4">
+            <button class="btn btn-primary m-2 float-right" data-toggle="modal" data-target="#addTaskModal" data-whatever="@Localizer["AddSubtaskBtnData"]">@Localizer["AddSubtaskBtnTitle"]</button>
             <div id="addSubtaskModal" class="modal fade">
-                @await Html.PartialAsync("_AddTaskModal", new TaskModel { ParentTaskId = Model.Id })
+                @await Html.PartialAsync("_AddTaskModal", Model.Id)
             </div>
         </div>
     </div>
@@ -44,11 +50,11 @@
         <table class="table w-auto">
             <thead>
                 <tr>
-                    <th scope="col">№</th>
-                    <th scope="col">Название</th>
-                    <th scope="col">Статус</th>
-                    <th scope="col">Время выполнения</th>
-                    <th scope="col">Трудозатраты</th>
+                    <th scope="col">@Localizer["Th1"]</th>
+                    <th scope="col">@Localizer["Th2"]</th>
+                    <th scope="col">@Localizer["Th3"]</th>
+                    <th scope="col">@Localizer["Th4"]</th>
+                    <th scope="col">@Localizer["Th5"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,24 +67,24 @@
                         <th scope="row">@subtask.Id</th>
                         <td>@subtask.Name</td>
 
-                        @switch (subtask.State.Id)
+                        @switch (subtask.StateId)
                         {
                             case 1:
-                                <td>Назначена</td>
+                                <td>@Localizer["StatusTd1"]</td>
                                 break;
                             case 2:
-                                <td>В процессе</td>
+                                <td>@Localizer["StatusTd2"]</td>
                                 break;
                             case 3:
-                                <td>Приостановлена</td>
+                                <td>@Localizer["StatusTd3"]</td>
                                 break;
                             case 4:
-                                <td>Завершена</td>
+                                <td>@Localizer["StatusTd4"]</td>
                                 break;
                         }
 
-                        <td>@subtask.ExecutionTime.Days дн. @subtask.ExecutionTime.Hours час. @subtask.ExecutionTime.Minutes мин.</td>
-                        <td>@subtask.PlannedIntensity чел./час</td>
+                    <td>@subtask.ExecutionTime.Days @Localizer["Day"] @subtask.ExecutionTime.Hours @Localizer["Hour"] @subtask.ExecutionTime.Minutes @Localizer["Minutes"]</td>
+                    <td>@subtask.PlannedIntensity @Localizer["Intensity"]</td>
                     </tr>
                 }
             }

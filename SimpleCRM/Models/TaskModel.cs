@@ -21,6 +21,6 @@ namespace SimpleCRM.Models
 		public int? ParentTaskId { get; set; }
 		public TaskModel ParentTask { get; set; }
 
-		public List<SubtaskModel> Subtasks { get; set; }
+		public List<TaskModel> Subtasks { get; set; }
 	}
 }

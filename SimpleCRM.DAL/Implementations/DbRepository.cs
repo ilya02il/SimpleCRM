@@ -1,10 +1,10 @@
 ﻿using SimpleCRM.DAL.Contracts;
 using SimpleCRM.DAL.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace SimpleCRM.DAL.Implementations
 {
@@ -16,12 +16,7 @@ namespace SimpleCRM.DAL.Implementations
         {
             _context = context;
         }
-
-        public IQueryable<T> Get<T>() where T : class, IEntity
-        {
-            return _context.Set<T>().Where(x => x.IsActive).AsQueryable();
-        }
-
+        
         public IQueryable<T> Get<T>(Expression<Func<T, bool>> selector) where T : class, IEntity
         {
             return _context.Set<T>().Where(selector).Where(x => x.IsActive).AsQueryable();
@@ -33,11 +28,6 @@ namespace SimpleCRM.DAL.Implementations
             return entity.Entity.Id;
         }
 
-        public async Task AddRange<T>(IEnumerable<T> newEntities) where T : class, IEntity
-        {
-            await _context.Set<T>().AddRangeAsync(newEntities);
-        }
-
         public void Attach<T>(T entity) where T : class, IEntity
         {
 	        _context.Set<T>().Attach(entity);
@@ -46,11 +36,6 @@ namespace SimpleCRM.DAL.Implementations
         public async Task Remove<T>(T entity) where T : class, IEntity
         {
             await Task.Run(() => _context.Set<T>().Remove(entity));
-        }
-
-        public async Task RemoveRange<T>(IEnumerable<T> entities) where T : class, IEntity
-        {
-            await Task.Run(() => _context.Set<T>().RemoveRange(entities));
         }
 
         public async Task Update<T>(T entity) where T : class, IEntity
@@ -68,11 +53,6 @@ namespace SimpleCRM.DAL.Implementations
 	        await Task.Run(() => _context.Entry(innerEntity).CurrentValues.SetValues(entity));
         }
 
-        public async Task UpdateRange<T>(IEnumerable<T> entities) where T : class, IEntity
-        {
-            await Task.Run(() => _context.Set<T>().UpdateRange(entities));
-        }
-
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
@@ -81,6 +61,20 @@ namespace SimpleCRM.DAL.Implementations
         public IQueryable<T> GetAll<T>() where T : class, IEntity
         {
             return _context.Set<T>().AsQueryable();
+        }
+
+        public IQueryable<TEntity> GetAllInclude<TEntity>(params Expression<Func<TEntity, object>>[] includeExpressions)
+	        where TEntity : class, IEntity
+        {
+	        var entitiesCollection = _context.Set<TEntity>().AsQueryable();
+
+
+            foreach (var includeExpression in includeExpressions)
+            {
+	            entitiesCollection = entitiesCollection.Include(includeExpression);
+            }
+
+	        return entitiesCollection;
         }
     }
 }

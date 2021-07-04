@@ -1,4 +1,7 @@
-﻿@model TaskModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model int
 
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -13,25 +16,25 @@
                         <div class="col">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="col-form-label">Название:</label>
+                                    <label class="col-form-label">@Localizer["Name"]</label>
                                     <input id="Name" type="text" for="Name" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="col-form-label">Список исполнителей:</label>
+                                    <label class="col-form-label">@Localizer["Executors"]</label>
                                     <input id="Executors" type="text" for="Executors" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="col-form-label">Время выполнения:</label>
+                                    <label class="col-form-label">@Localizer["ExecutionTime"]</label>
                                     <input id="ExecutionTime" type="text" for="ExecutionTime" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="col-form-label">Дата завершения:</label>
+                                    <label class="col-form-label">@Localizer["CompletionDate"]</label>
                                     <input id="CompletionDate" type="text" for="CompletionDate" class="form-control">
                                 </div>
                             </div>
@@ -39,24 +42,24 @@
                         <div class="col">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="col-form-label">Статус:</label>
+                                    <label class="col-form-label">@Localizer["Status"]</label>
                                     <select id="StateId" class="form-control" for="StateId">
-                                        <option value="1">Назначена</option>
-                                        <option value="2">Приостановлена</option>
-                                        <option value="3">Выполняется</option>
-                                        <option value="4">Завершена</option>
+                                        <option value="1">@Localizer["Assigned"]</option>
+                                        <option value="2">@Localizer["InProgress"]</option>
+                                        <option value="3">@Localizer["Paused"]</option>
+                                        <option value="4">@Localizer["Finished"]</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="col-form-label">Плановая трудоемкость:</label>
+                                    <label class="col-form-label">@Localizer["Intensity"]</label>
                                     <input id="PlannedIntensity" type="text" for="PlannedIntensity" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3 mh-100">
                                 <div class="form-group">
-                                    <label class="col-form-label">Описание:</label>
+                                    <label class="col-form-label">@Localizer["Description"]</label>
                                     <textarea id="Description" for="Description" class="form-control"></textarea>
                                 </div>
                             </div>
@@ -66,8 +69,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-            <button id="submitButton" type="button" class="btn btn-primary" onclick="addTask(@Model.Id)">Добавить</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["CancelBtnTitle"]</button>
+            <button id="submitButton" type="button" class="btn btn-primary" onclick="addTask(@Model)">@Localizer["SubmitBtnTitle"]</button>
         </div>
     </div>
 </div>

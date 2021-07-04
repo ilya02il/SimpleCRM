@@ -8,6 +8,6 @@ namespace SimpleCRM.DAL.Entities
 		public string Status { get; set; }
 		public bool IsActive { get; set; }
 
-		public virtual List<TaskEntity> Tasks { get; set; }
+		public virtual List<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
 	}
 }

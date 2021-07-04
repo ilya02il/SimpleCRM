@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using SimpleCRM.Contracts;
 using SimpleCRM.Models;
 using System.Threading.Tasks;
@@ -15,51 +17,94 @@ namespace SimpleCRM.Controllers
 		}
 
 		[HttpGet]
-		public ViewResult Index()
+		public ActionResult Index()
 		{
-			var taskList = _taskService.GetAll();
+			try
+			{
+				var taskList = _taskService.GetAll();
 
-			return View(taskList);
+				return View(taskList);
+			}
+			catch (Exception exp)
+			{
+				Debug.WriteLine(exp);
+				return BadRequest("Tasks was not found");
+			}
 		}
 
 		[HttpGet]
 		public ActionResult GetTaskTree()
 		{
-			var taskList = _taskService.GetAll();
-
-			return PartialView("_TaskTree", taskList);
+			try
+			{
+				var taskList = _taskService.GetAll();
+				return PartialView("_TaskTree", taskList);
+			}
+			catch (Exception exp)
+			{
+				Debug.WriteLine(exp);
+				return BadRequest("Tasks was not found");
+			}
 		}
 
 		[HttpGet]
 		public ActionResult GetTaskInfo(int id)
 		{
-			var task = _taskService.Get(id);
-
-			return PartialView("_TaskInfoContent", task);
+			try
+			{
+				var task = _taskService.Get(id);
+				return PartialView("_TaskInfoContent", task);
+			}
+			catch (Exception exp)
+			{
+				Debug.WriteLine(exp);
+				return BadRequest("Task was not found");
+			}
 		}
 
 		[HttpPost]
 		public async Task<ActionResult> CreateTask([FromBody]TaskModel task)
 		{
-			await _taskService.Create(task);
-
-			return Ok();
+			try
+			{
+				await _taskService.Create(task);
+				return Ok();
+			}
+			catch (Exception exp)
+			{
+				Debug.WriteLine(exp);
+				return BadRequest("Tasks was not created");
+			}
 		}
 
 		[HttpPut]
 		public async Task<ActionResult> EditTask([FromBody]TaskModel task)
 		{
-			await _taskService.Update(task);
-
-			return Ok();
+			try
+			{
+				await _taskService.Update(task);
+				return Ok();
+			}
+			catch (Exception exp)
+			{
+				Debug.WriteLine(exp);
+				return BadRequest("Tasks was not edited");
+			}
 		}
 
 		[HttpDelete]
 		public async Task<ActionResult> DeleteTask(int id)
 		{
-			await _taskService.Delete(id);
-
-			return Ok();
+			try
+			{
+				await _taskService.Delete(id);
+				return Ok();
+			}
+			catch (Exception exp)
+			{
+				Debug.WriteLine(exp);
+				return BadRequest("Tasks was not deleted");
+			}
 		}
 
 	}

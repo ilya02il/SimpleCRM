@@ -2,12 +2,4 @@
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/mixins";
 
-$theme-colors: ( "primary": #71A8F5,
-    "secondary": #5F6B73,
-    "success": #88BFAB,
-    "danger": #E73E3E,
-    "warning": #F6D94F,
-    "info": #ff4136,
-    "light": #D9D9D9,
-    "dark": #262626
-);
+$theme-colors: ( "primary": #5e9de1, "secondary": #5F6B73, "success": #88BFAB, "danger": #E73E3E, "warning": #F6D94F, "info": #ff4136, "light": #D9D9D9, "dark": #262626 );

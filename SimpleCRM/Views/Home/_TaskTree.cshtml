@@ -18,13 +18,13 @@
             }
 
             result += "<li>" +
-                      $"<span class=\"caret\"><a onclick=\"LoadTaskInfo({task.Id})\">{task.Name}</a></span>" +
-                      "<ul class=\"nested\">" +
+                  $"<span class=\"caret\"><a onclick=\"LoadTaskInfo({task.Id})\">{task.Name}</a></span>" +
+                  "<ul class=\"nested\">" +
 
-                      StoreTasksInTree(task.Subtasks) +
+                  StoreTasksInTree(task.Subtasks) +
 
-                      "</ul>" +
-                      "</li>";
+                  "</ul>" +
+                  "</li>";
         }
 
         return new HtmlString(result);

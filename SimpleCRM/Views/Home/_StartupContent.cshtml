@@ -1,4 +1,7 @@
-﻿@model List<TaskModel>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model List<TaskModel>
 
 <div class="row">
     <div class="col-lg-8">
@@ -18,40 +21,41 @@
         <table class="table w-auto">
             <thead>
                 <tr>
-                    <th scope="col">№</th>
-                    <th scope="col">Название</th>
-                    <th scope="col">Статус</th>
-                    <th scope="col">Время выполнения</th>
-                    <th scope="col">Трудозатраты</th>
+                    <th scope="col">@Localizer["Th1"]</th>
+                    <th scope="col">@Localizer["Th2"]</th>
+                    <th scope="col">@Localizer["Th3"]</th>
+                    <th scope="col">@Localizer["Th4"]</th>
+                    <th scope="col">@Localizer["Th5"]</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var task in Model)
-                {
-                    <tr>
-                        <th scope="row">@task.Id</th>
-                        <td>@task.Name</td>
 
-                        @switch (task.StateId)
-                        {
-                            case 1:
-                                <td>Назначена</td>
-                                break;
-                            case 2:
-                                <td>В процессе</td>
-                                break;
-                            case 3:
-                                <td>Приостановлена</td>
-                                break;
-                            case 4:
-                                <td>Завершена</td>
-                                break;
-                        }
+            @foreach (var task in Model)
+            {
+                <tr>
+                    <th scope="row">@task.Id</th>
+                    <td>@task.Name</td>
 
-                        <td>@task.ExecutionTime.Days дн. @task.ExecutionTime.Hours час. @task.ExecutionTime.Minutes мин.</td>
-                        <td>@task.PlannedIntensity чел./час</td>
-                    </tr>
-                }
+                    @switch (task.StateId)
+                    {
+                        case 1:
+                            <td>@Localizer["StatusTd1"]</td>
+                            break;
+                        case 2:
+                            <td>@Localizer["StatusTd2"]</td>
+                            break;
+                        case 3:
+                            <td>@Localizer["StatusTd3"]</td>
+                            break;
+                        case 4:
+                            <td>@Localizer["StatusTd4"]</td>
+                            break;
+                    }
+
+                    <td>@task.ExecutionTime.Days @Localizer["Day"] @task.ExecutionTime.Hours @Localizer["Hour"] @task.ExecutionTime.Minutes @Localizer["Minutes"]</td>
+                    <td>@task.PlannedIntensity @Localizer["Intensity"]</td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

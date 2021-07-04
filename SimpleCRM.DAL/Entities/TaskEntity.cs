@@ -7,6 +7,8 @@ namespace SimpleCRM.DAL.Entities
 {
 	public class TaskEntity : IEntity
 	{
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Executors { get; set; }
@@ -18,27 +20,13 @@ namespace SimpleCRM.DAL.Entities
 		public bool IsActive { get; set; }
 		
 		public int? ParentTaskId { get; set; }
-		public virtual TaskEntity ParentTask { get; set; }
+		public TaskEntity ParentTask { get; set; }
 
 		[Required]
 		[ForeignKey("StateId")]
 		public int StateId { get; set; }
-		public virtual StateEntity State { get; set; }
+		public StateEntity State { get; set; }
 
-		public virtual List<TaskEntity> Subtasks { get; set; }
-	}
-
-	public class TaskNode : IEntity
-	{
-		public int Id { get; set; }
-		public bool IsActive { get; set; }
-
-		public int AncestorId { get; set; }
-		public virtual TaskEntity Ancestor { get; set; }
-
-		public int OffspringId { get; set; }
-		public virtual TaskEntity Offspring { get; set; }
-
-		public int Separation { get; set; }
+		public List<TaskEntity> Subtasks { get; set; }
 	}
 }

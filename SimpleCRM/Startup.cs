@@ -1,8 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Globalization;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,9 +40,14 @@ namespace SimpleCRM
 				options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")),
 				ServiceLifetime.Transient);
 
-			//services.AddAutoMapper(typeof(Startup));
+			services.AddLocalization(options => 
+				options.ResourcesPath = "Resources");
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			services.AddMvc()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+				.AddViewLocalization(options => options.ResourcesPath = "Resources")
+				.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+				.AddDataAnnotationsLocalization();
 
 			var mapperConfig = new MapperConfiguration(mc =>
 			{
@@ -65,6 +73,17 @@ namespace SimpleCRM
 				app.UseExceptionHandler("/Home/Error");
 				app.UseHsts();
 			}
+
+			var supportedCultures = new[]
+			{
+				new CultureInfo("ru")
+			};
+			app.UseRequestLocalization(new RequestLocalizationOptions
+			{
+				DefaultRequestCulture = new RequestCulture("ru"),
+				SupportedCultures = supportedCultures,
+				SupportedUICultures = supportedCultures
+			});
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();

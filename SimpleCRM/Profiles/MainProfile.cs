@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using SimpleCRM.DAL.Entities;
 using SimpleCRM.Models;
 
