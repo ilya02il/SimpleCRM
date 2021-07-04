@@ -16,14 +16,29 @@ namespace SimpleCRM.DAL.Entities
 		public TimeSpan ExecutionTime { get; set; }
 		public DateTime CompletionDate { get; set; }
 		public bool IsActive { get; set; }
-
-		[ForeignKey("ParentTaskId")]
-		public TaskEntity ParentTask { get; set; }
 		
+		public int? ParentTaskId { get; set; }
+		public virtual TaskEntity ParentTask { get; set; }
+
 		[Required]
 		[ForeignKey("StateId")]
-		public StateEntity State { get; set; }
+		public int StateId { get; set; }
+		public virtual StateEntity State { get; set; }
 
-		public List<TaskEntity> Subtasks { get; set; }
+		public virtual List<TaskEntity> Subtasks { get; set; }
+	}
+
+	public class TaskNode : IEntity
+	{
+		public int Id { get; set; }
+		public bool IsActive { get; set; }
+
+		public int AncestorId { get; set; }
+		public virtual TaskEntity Ancestor { get; set; }
+
+		public int OffspringId { get; set; }
+		public virtual TaskEntity Offspring { get; set; }
+
+		public int Separation { get; set; }
 	}
 }

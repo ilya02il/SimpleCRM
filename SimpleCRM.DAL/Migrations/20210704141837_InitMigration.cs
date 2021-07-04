@@ -36,24 +36,24 @@ namespace SimpleCRM.DAL.Migrations
                     ExecutionTime = table.Column<TimeSpan>(nullable: false),
                     CompletionDate = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    StateId = table.Column<int>(nullable: false),
-                    TaskEntityId = table.Column<int>(nullable: true)
+                    ParentTaskId = table.Column<int>(nullable: true),
+                    StateId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Tasks_ParentTaskId",
+                        column: x => x.ParentTaskId,
+                        principalTable: "Tasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Tasks_States_StateId",
                         column: x => x.StateId,
                         principalTable: "States",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Tasks_Tasks_TaskEntityId",
-                        column: x => x.TaskEntityId,
-                        principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -68,14 +68,14 @@ namespace SimpleCRM.DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tasks_ParentTaskId",
+                table: "Tasks",
+                column: "ParentTaskId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tasks_StateId",
                 table: "Tasks",
                 column: "StateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_TaskEntityId",
-                table: "Tasks",
-                column: "TaskEntityId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -1,30 +1,44 @@
 ﻿@using Microsoft.AspNetCore.Html
 @model TaskModel
 
-<div class="row">
-    <div class="col-lg-7">
-        <div class="common-info">
+<div clas="row">
+    <div class="common-info d-flex">
+        <div class="col-lg-7">
             <h2>Общая информация</h2>
             <div class="common-info__info">
                 Название задачи: @Model.Name<br>
-                Статус: @Model.State.Status<br>
+                Статус: @*@Model.State.Status*@<br>
                 Исполнители: @Model.Executors<br>
-                Описание задачи: @Model.Description<br>
-                Дата регистрации в системе: @Model.RegistrationDate<br>
                 Плановая трудоемкость: @Model.PlannedIntensity<br>
                 @*Время выполнения: @Model.ExecutionTime.Days + @Model.Subtasks.Sum(subtask => subtask.ExecutionTime.Days) дн.
-                @Model.ExecutionTime.Hours + @Model.Subtasks.Sum(subtask => subtask.ExecutionTime.Hours) час.<br>*@
-                Дата завершения: @Model.CompletionDate<br>
+            @Model.ExecutionTime.Hours + @Model.Subtasks.Sum(subtask => subtask.ExecutionTime.Hours) час.<br>*@
+                Дата регистрации в системе: @Model.RegistrationDate.ToShortDateString()<br>
+                Дата завершения: @Model.CompletionDate.ToShortDateString()<br>
+                Описание задачи: @Model.Description<br>
             </div>
-            <h2>Список подзадач</h2>
+        </div>
+        <div class="col-lg-5">
+            <button id="editTaskButton" class="btn btn-outline-primary m-2 float-right" data-toggle="modal" data-target="#editTaskModal">Редактировать</button>
+            <div id="editTaskModal" class="modal fade">
+                @await Html.PartialAsync("_EditTaskModal", Model)
+            </div>
+            <button id="deleteTaskButton" class="btn btn-primary m-2 float-right" onclick="deleteTask(@Model.Id)">Удалить</button>
         </div>
     </div>
-    <div class="col-lg-5">
-        <button class="btn btn-outline-primary m-2">Редактировать</button>
-        <button class="btn btn-primary m-2">Удалить</button>
+</div>
+<div clas="row">
+    <div class="common-info d-flex">
+        <div class="col-lg-7">
+            <h2>Список подзадач</h2>
+        </div>
+        <div class="col-lg-5">
+            <button class="btn btn-primary m-2 float-right" data-toggle="modal" data-target="#addTaskModal" data-whatever="Добавление подзадачи">Добавить подзадачу</button>
+            <div id="addSubtaskModal" class="modal fade">
+                @await Html.PartialAsync("_AddTaskModal", new TaskModel { ParentTaskId = Model.Id })
+            </div>
+        </div>
     </div>
 </div>
-
 <div class="row">
     <div class="col-lg-12">
         <table class="table w-auto">

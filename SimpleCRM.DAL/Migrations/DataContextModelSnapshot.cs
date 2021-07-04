@@ -65,8 +65,7 @@ namespace SimpleCRM.DAL.Migrations
 
                     b.Property<DateTime>("RegistrationDate");
 
-                    b.Property<int?>("StateId")
-                        .IsRequired();
+                    b.Property<int>("StateId");
 
                     b.HasKey("Id");
 
@@ -75,13 +74,20 @@ namespace SimpleCRM.DAL.Migrations
                     b.HasIndex("StateId");
 
                     b.ToTable("Tasks");
+
+                    b.HasData(
+                        new { Id = 1, CompletionDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), ExecutionTime = new TimeSpan(0, 0, 0, 0, 0), IsActive = false, PlannedIntensity = 0.0, RegistrationDate = new DateTime(2021, 7, 4, 22, 38, 27, 627, DateTimeKind.Local), StateId = 1 },
+                        new { Id = 2, CompletionDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), ExecutionTime = new TimeSpan(0, 0, 0, 0, 0), IsActive = false, PlannedIntensity = 0.0, RegistrationDate = new DateTime(2021, 7, 4, 22, 38, 27, 627, DateTimeKind.Local), StateId = 1 },
+                        new { Id = 3, CompletionDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), ExecutionTime = new TimeSpan(0, 0, 0, 0, 0), IsActive = false, PlannedIntensity = 0.0, RegistrationDate = new DateTime(2021, 7, 4, 22, 38, 27, 627, DateTimeKind.Local), StateId = 1 }
+                    );
                 });
 
             modelBuilder.Entity("SimpleCRM.DAL.Entities.TaskEntity", b =>
                 {
                     b.HasOne("SimpleCRM.DAL.Entities.TaskEntity", "ParentTask")
                         .WithMany("Subtasks")
-                        .HasForeignKey("ParentTaskId");
+                        .HasForeignKey("ParentTaskId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SimpleCRM.DAL.Entities.StateEntity", "State")
                         .WithMany("Tasks")

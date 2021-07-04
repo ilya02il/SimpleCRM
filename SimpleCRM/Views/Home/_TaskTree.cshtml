@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Html
+@model List<TaskModel>
+
+@functions
+{
+    private static HtmlString StoreTasksInTree(IEnumerable<TaskModel> tasks)
+    {
+        var result = string.Empty;
+
+        foreach (var task in tasks)
+        {
+            if (task.Subtasks.Count == 0)
+            {
+                result += "<li>" +
+                          $"<span class=\"caret-empty\"><a onclick=\"LoadTaskInfo({task.Id})\">{task.Name}</a></span>";
+
+                continue;
+            }
+
+            result += "<li>" +
+                      $"<span class=\"caret\"><a onclick=\"LoadTaskInfo({task.Id})\">{task.Name}</a></span>" +
+                      "<ul class=\"nested\">" +
+
+                      StoreTasksInTree(task.Subtasks) +
+
+                      "</ul>" +
+                      "</li>";
+        }
+
+        return new HtmlString(result);
+    }
+}
+
+@StoreTasksInTree(Model)

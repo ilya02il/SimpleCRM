@@ -10,7 +10,7 @@ using SimpleCRM.DAL.Implementations;
 namespace SimpleCRM.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210703123122_InitMigration")]
+    [Migration("20210704141837_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,34 +61,34 @@ namespace SimpleCRM.DAL.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("ParentTaskId");
+
                     b.Property<double>("PlannedIntensity");
 
                     b.Property<DateTime>("RegistrationDate");
 
-                    b.Property<int?>("StateId")
-                        .IsRequired();
-
-                    b.Property<int?>("TaskEntityId");
+                    b.Property<int>("StateId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StateId");
+                    b.HasIndex("ParentTaskId");
 
-                    b.HasIndex("TaskEntityId");
+                    b.HasIndex("StateId");
 
                     b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("SimpleCRM.DAL.Entities.TaskEntity", b =>
                 {
+                    b.HasOne("SimpleCRM.DAL.Entities.TaskEntity", "ParentTask")
+                        .WithMany("Subtasks")
+                        .HasForeignKey("ParentTaskId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("SimpleCRM.DAL.Entities.StateEntity", "State")
                         .WithMany("Tasks")
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SimpleCRM.DAL.Entities.TaskEntity")
-                        .WithMany("Subtasks")
-                        .HasForeignKey("TaskEntityId");
                 });
 #pragma warning restore 612, 618
         }

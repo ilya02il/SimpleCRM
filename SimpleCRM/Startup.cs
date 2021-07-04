@@ -34,7 +34,8 @@ namespace SimpleCRM
 			});
 
 			services.AddDbContext<DataContext>(options =>
-				options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+				options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")),
+				ServiceLifetime.Transient);
 
 			//services.AddAutoMapper(typeof(Startup));
 

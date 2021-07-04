@@ -3,7 +3,7 @@
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Редактирование задачи</h5>
         </div>
         <div class="modal-body">
             <div class="container-fluid">
@@ -14,25 +14,25 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">Название:</label>
-                                    <input id="Name" type="text" for="Name" class="form-control">
+                                    <input id="EditName" type="text" for="Name" class="form-control" value="@Model.Name">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">Список исполнителей:</label>
-                                    <input id="Executors" type="text" for="Executors" class="form-control">
+                                    <input id="EditExecutors" type="text" for="Executors" class="form-control" value="@Model.Executors">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">Время выполнения:</label>
-                                    <input id="ExecutionTime" type="text" for="ExecutionTime" class="form-control">
+                                    <input id="EditExecutionTime" type="text" for="ExecutionTime" class="form-control" value="@Model.ExecutionTime">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">Дата завершения:</label>
-                                    <input id="CompletionDate" type="text" for="CompletionDate" class="form-control">
+                                    <input id="EditCompletionDate" type="text" for="CompletionDate" class="form-control" value="@Model.CompletionDate">
                                 </div>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">Статус:</label>
-                                    <select id="StateId" class="form-control" for="StateId">
+                                    <select id="EditStateId" class="form-control" for="StateId">
                                         <option value="1">Назначена</option>
                                         <option value="2">Приостановлена</option>
                                         <option value="3">Выполняется</option>
@@ -51,13 +51,15 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">Плановая трудоемкость:</label>
-                                    <input id="PlannedIntensity" type="text" for="PlannedIntensity" class="form-control">
+                                    <input id="EditPlannedIntensity" type="text" for="PlannedIntensity" class="form-control" value="@Model.PlannedIntensity">
                                 </div>
                             </div>
                             <div class="mb-3 mh-100">
                                 <div class="form-group">
                                     <label class="col-form-label">Описание:</label>
-                                    <textarea id="Description" for="Description" class="form-control"></textarea>
+                                    <textarea id="EditDescription" for="Description" class="form-control">
+@Model.Description
+</textarea>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +69,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-            <button id="submitButton" type="button" class="btn btn-primary" onclick="addTask(@Model.Id)">Добавить</button>
+            <button id="editButton" type="button" class="btn btn-primary" onclick="editTask(@Model.Id, @Model.ParentTaskId)">Сохранить изменения</button>
         </div>
     </div>
 </div>

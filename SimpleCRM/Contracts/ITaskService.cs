@@ -8,9 +8,8 @@ namespace SimpleCRM.Contracts
 	{
 		Task<int> Create(TaskModel task);
 		List<TaskModel> GetAll();
-		Task<TaskModel> GetTask(int id);
-		Task<SubtaskModel> GetSubtask(int id);
+		TaskModel Get(int id);
 		Task Update(TaskModel task);
-		Task Delete(TaskModel task);
+		Task Delete(int taskId);
 	}
 }

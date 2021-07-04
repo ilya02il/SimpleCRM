@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using SimpleCRM.Contracts;
 using SimpleCRM.DAL.Contracts;
 using SimpleCRM.DAL.Entities;
@@ -24,8 +23,9 @@ namespace SimpleCRM.Implementations
 		public async Task<int> Create(TaskModel task)
 		{
 			var taskEntity = _mapper.Map<TaskEntity>(task);
-			var result = await _dbRepository.Add(taskEntity);
-			//await _dbRepository.SaveChangesAsync();
+			_dbRepository.Attach(taskEntity.State);
+			var result = _dbRepository.Add(taskEntity);
+			await _dbRepository.SaveChangesAsync();
 
 			return result;
 		}
@@ -34,59 +34,46 @@ namespace SimpleCRM.Implementations
 		{
 			var taskEntitiesCollection = _dbRepository.GetAll<TaskEntity>().ToList();
 			var taskModelsCollection = new List<TaskModel>();
+			//var taskModelsCollection = _mapper.Map<List<TaskModel>>(taskEntitiesCollection);
 
-			foreach (var taskModel in _mapper.Map<List<TaskModel>>(taskEntitiesCollection))
+			foreach (var taskEntity in taskEntitiesCollection)
 			{
-				if (taskModel.Subtasks.Count == 0) continue;
-
-				var summarizedPlannedIntensity = taskModel.PlannedIntensity;
-				var summarizedExecutionTime = taskModel.ExecutionTime;
-
-				summarizedPlannedIntensity = taskModel.Subtasks.Aggregate(summarizedPlannedIntensity, (current, subtask) => current + subtask.PlannedIntensity);
-				summarizedExecutionTime = taskModel.Subtasks.Aggregate(summarizedExecutionTime, (current, subtask) => current + subtask.ExecutionTime);
-
-				taskModel.PlannedIntensity = summarizedPlannedIntensity;
-				taskModel.ExecutionTime = summarizedExecutionTime;
-
+				var taskModel = _mapper.Map<TaskModel>(taskEntity);
 				taskModelsCollection.Add(taskModel);
 			}
 
 			return taskModelsCollection;
 		}
 
-		public async Task<TaskModel> GetTask(int id)
+		public TaskModel Get(int id)
 		{
-			var taskEntity = await _dbRepository.Get<TaskEntity>().FirstOrDefaultAsync(entity => entity.Id == id);
+			var taskEntity = _dbRepository.GetAll<TaskEntity>().FirstOrDefault(entity => entity.Id == id);
 			var taskModel = _mapper.Map<TaskModel>(taskEntity);
 
 			return taskModel;
 		}
 
-		public async Task<SubtaskModel> GetSubtask(int id)
-		{
-			var subtaskEntity = await _dbRepository.Get<SubtaskEntity>().FirstOrDefaultAsync(entity => entity.Id == id);
-			var subtaskModel = _mapper.Map<SubtaskModel>(subtaskEntity);
-
-			return subtaskModel;
-		}
-
 		public async Task Update(TaskModel task)
 		{
-			var innerTaskEntity = await _dbRepository.Get<TaskEntity>(t => t.Id == task.Id).FirstOrDefaultAsync();
+			var innerTaskEntity = _dbRepository.GetAll<TaskEntity>().FirstOrDefault(t => t.Id == task.Id);
 
 			if (innerTaskEntity == null)
 				return;
 
-			switch (task.State.Status)
+			switch (task.StateId)
 			{
-				case "Finished" when innerTaskEntity.State.Status != "InProgress":
-				case "Paused" when innerTaskEntity.State.Status != "InProgress":
+				case 3 when innerTaskEntity.State.Status != "InProgress":
 				{
 					return;
 				}
 
-				case "Finished":
+				case 4:
 				{
+					if (innerTaskEntity.State.Status != "InProgress")
+					{
+						return;
+					}
+
 					foreach (var subtask in task.Subtasks)
 					{
 						subtask.State.Status = "Finished";
@@ -99,12 +86,18 @@ namespace SimpleCRM.Implementations
 			var taskEntity = _mapper.Map<TaskEntity>(task);
 
 			await _dbRepository.Update(taskEntity);
+			await _dbRepository.SaveChangesAsync();
 		}
 
-		public async Task Delete(TaskModel task)
+		public async Task Delete(int taskId)
 		{
-			var taskEntity = _mapper.Map<TaskEntity>(task);
-			await _dbRepository.Remove(taskEntity);
+			var innerTaskEntity = _dbRepository.GetAll<TaskEntity>().FirstOrDefault(task => task.Id == taskId);
+
+			if (innerTaskEntity == null)
+				return;
+
+			await _dbRepository.Remove(innerTaskEntity);
+			await _dbRepository.SaveChangesAsync();
 		}
 	}
 }

@@ -16,6 +16,16 @@ namespace SimpleCRM.DAL.Implementations
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			modelBuilder.Entity<TaskEntity>(entity =>
+			{
+				entity.HasKey(x => x.Id);
+				entity.HasOne(x => x.ParentTask)
+					.WithMany(x => x.Subtasks)
+					.HasForeignKey(x => x.ParentTaskId)
+					.IsRequired(false)
+					.OnDelete(DeleteBehavior.Restrict);
+			});
+
 			modelBuilder.Entity<StateEntity>().HasData(
 				new StateEntity { Id = 1, Status = "Assigned" },
 				new StateEntity { Id = 2, Status = "InProgress" },
