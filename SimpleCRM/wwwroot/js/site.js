@@ -36,13 +36,26 @@ function putToController(data, dataType, url) {
 
 function getTaskCreationDataAsJson(parentTaskId) {
     return {
-        'Name': $('#Name').val(),
-        'Executors': $('#Executors').val(),
-        'ExecutionTime': $('#ExecutionTime').val(),
-        'CompletionDate': $('#CompletionDate').val(),
-        'StateId': $('#StateId').val(),
-        'PlannedIntensity': $('#PlannedIntensity').val(),
-        'Description': $('#Description').val(),
+        'Name': $('#TaskName').val(),
+        'Executors': $('#TaskExecutors').val(),
+        'ExecutionTime': $('#TaskExecutionTime').val(),
+        'CompletionDate': $('#TaskCompletionDate').val(),
+        'StateId': $('#TaskStateId').val(),
+        'PlannedIntensity': $('#TaskPlannedIntensity').val(),
+        'Description': $('#TaskDescription').val(),
+        'ParentTaskId': parentTaskId
+    }
+}
+
+function getSubtaskCreationDataAsJson(parentTaskId) {
+    return {
+        'Name': $('#SubtaskName').val(),
+        'Executors': $('#SubtaskExecutors').val(),
+        'ExecutionTime': $('#SubtaskExecutionTime').val(),
+        'CompletionDate': $('#SubtaskCompletionDate').val(),
+        'StateId': $('#SubtaskStateId').val(),
+        'PlannedIntensity': $('#SubtaskPlannedIntensity').val(),
+        'Description': $('#SubtaskDescription').val(),
         'ParentTaskId': parentTaskId
     }
 }
@@ -88,57 +101,46 @@ function addTask(parentTaskId) {
     return false;
 }
 
+function addSubtask(parentTaskId) {
+    console.log(parentTaskId);
+
+    const data = getSubtaskCreationDataAsJson(parentTaskId);
+
+    postToController(data, "application/json", '/Home/CreateTask');
+
+    $('#addSubtaskModal').modal('hide');
+    LoadTaskTree();
+
+    return false;
+}
+
 function editTask(taskId, parentTaskId) {
     const data = getTaskEditDataAsJson(taskId, parentTaskId);
 
     putToController(data, "application/json", '/Home/EditTask');
+    LoadTaskTree();
 
     $('#editTaskModal').modal('hide');
 
     return false;
 }
 
-//$('#deleteTaskButton').click(function (taskId) {
-//    const data = getTaskDataAsJson();
-
-//    postToController(JSON.stringify(data), "application/json", '/Home/CreateTask');
-
-//    $('#addTaskModal').modal('hide');
-//    $("#myUL").load(`/Home/GetTaskTree`);
-
-//    return false;
-//});
-
 function LoadTaskInfo(id) {
     $("#main").load(`/Home/GetTaskInfo?id=${id}`);
 }
 
-//function LoadCommonTaskInfo() {
-//    $("#main").load(`/Home/Index`);
-//}
-
 function LoadTaskTree() {
     $("#myUL").load(`/Home/GetTaskTree`);
 
-    $(document).on('click', '.caret', function (event) {
-        this.parentElement.querySelector(".nested").classList.toggle("active");
-        this.classList.toggle("caret-down");
-    });
-}
+    var togglers = document.getElementByClassName("caret");
 
-$('#addTaskModal').on('show.bs.modal', modalTitleChange);
-        
-function modalTitleChange (event) {
-    var button = $(event.relatedTarget);
-    var recipient = button.data('whatever');
-    var modal = $(this);
-    modal.find('.modal-title').text(recipient);
+    for (var i = 0; i < togglers.length; i++) {
+        togglers[i].addEventListener("click", function() {
+            this.parentElement.querySelector(".nested").classList.toggle("active");
+            this.classList.toggle("caret-down");
+        });
+    }
 }
-
-//function CreateTask(formId) {
-//    const form = document.getElementById(formId);
-//    form.submit();
-//}
 
 $(document).on('click', '.caret', function (event) {
     this.parentElement.querySelector(".nested").classList.toggle("active");

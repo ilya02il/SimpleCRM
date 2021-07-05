@@ -120,6 +120,9 @@
   <data name="CommonInfoSumExecutionTime" xml:space="preserve">
     <value>Суммарное время выполнения:</value>
   </data>
+  <data name="CommonInfoSumIntensity" xml:space="preserve">
+    <value>Суммарная плановые трудозатраты:</value>
+  </data>
   <data name="CommonInfoTasksAmount" xml:space="preserve">
     <value>Общее количество задач:</value>
   </data>
@@ -128,9 +131,6 @@
   </data>
   <data name="CommonInfoTitle2" xml:space="preserve">
     <value>Список задач</value>
-  </data>
-  <data name="CommontInfoSumIntensity" xml:space="preserve">
-    <value>Суммарная плановые трудозатраты:</value>
   </data>
   <data name="Day" xml:space="preserve">
     <value>дн.</value>

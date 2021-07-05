@@ -6,8 +6,7 @@
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">@Localizer["Title"]</h5>
-            <h1>@Model.Id</h1>
+            <h5 class="modal-title">@Localizer["Title"]</h5>
         </div>
         <div class="modal-body">
             <div class="container-fluid">
@@ -18,25 +17,25 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Name"]</label>
-                                    <input id="EditName" type="text" for="Name" class="form-control" value="@Model.Name">
+                                    <input id="SubtaskName" type="text" for="Name" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Executors"]</label>
-                                    <input id="EditExecutors" type="text" for="Executors" class="form-control" value="@Model.Executors">
+                                    <input id="SubtaskExecutors" type="text" for="Executors" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["ExecutionTime"]</label>
-                                    <input id="EditExecutionTime" type="text" for="ExecutionTime" class="form-control" value="@Model.ExecutionTime">
+                                    <input id="SubtaskExecutionTime" type="text" for="ExecutionTime" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["CompletionDate"]</label>
-                                    <input id="EditCompletionDate" type="text" for="CompletionDate" class="form-control" value="@Model.CompletionDate">
+                                    <input id="SubtaskCompletionDate" type="text" for="CompletionDate" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -44,7 +43,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Status"]</label>
-                                    <select id="EditStateId" class="form-control" for="StateId">
+                                    <select id="SubtaskStateId" class="form-control" for="StateId">
                                         <option value="1">@Localizer["Assigned"]</option>
                                         <option value="2">@Localizer["InProgress"]</option>
                                         <option value="3">@Localizer["Paused"]</option>
@@ -55,15 +54,13 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Intensity"]</label>
-                                    <input id="EditPlannedIntensity" type="text" for="PlannedIntensity" class="form-control" value="@Model.PlannedIntensity">
+                                    <input id="SubtaskPlannedIntensity" type="text" for="PlannedIntensity" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3 mh-100">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Description"]</label>
-                                    <textarea id="EditDescription" for="Description" class="form-control">
-@Model.Description
-</textarea>
+                                    <textarea id="SubtaskDescription" for="Description" class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +70,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["CancelBtnTitle"]</button>
-            <button id="editButton" type="button" class="btn btn-primary" onclick="editTask(@Model.Id, @Model.ParentTaskId)">
+            <button id="addSubtaskButton" type="button" class="btn btn-primary" onclick="addSubtask(@Model.Id)">
                 @Localizer["SubmitBtnTitle"]
             </button>
         </div>

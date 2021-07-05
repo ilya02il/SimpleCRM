@@ -1,12 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 
 @inject IViewLocalizer Localizer
-@model int
+@model TaskModel
 
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+            <h5 class="modal-title">@Localizer["Title"]</h5>
         </div>
         <div class="modal-body">
             <div class="container-fluid">
@@ -17,25 +17,25 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Name"]</label>
-                                    <input id="Name" type="text" for="Name" class="form-control">
+                                    <input id="TaskName" type="text" for="Name" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Executors"]</label>
-                                    <input id="Executors" type="text" for="Executors" class="form-control">
+                                    <input id="TaskExecutors" type="text" for="Executors" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["ExecutionTime"]</label>
-                                    <input id="ExecutionTime" type="text" for="ExecutionTime" class="form-control">
+                                    <input id="TaskExecutionTime" type="text" for="ExecutionTime" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["CompletionDate"]</label>
-                                    <input id="CompletionDate" type="text" for="CompletionDate" class="form-control">
+                                    <input id="TaskCompletionDate" type="text" for="CompletionDate" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Status"]</label>
-                                    <select id="StateId" class="form-control" for="StateId">
+                                    <select id="TaskStateId" class="form-control" for="StateId">
                                         <option value="1">@Localizer["Assigned"]</option>
                                         <option value="2">@Localizer["InProgress"]</option>
                                         <option value="3">@Localizer["Paused"]</option>
@@ -54,13 +54,13 @@
                             <div class="mb-3">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Intensity"]</label>
-                                    <input id="PlannedIntensity" type="text" for="PlannedIntensity" class="form-control">
+                                    <input id="TaskPlannedIntensity" type="text" for="PlannedIntensity" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3 mh-100">
                                 <div class="form-group">
                                     <label class="col-form-label">@Localizer["Description"]</label>
-                                    <textarea id="Description" for="Description" class="form-control"></textarea>
+                                    <textarea id="TaskDescription" for="Description" class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,9 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["CancelBtnTitle"]</button>
-            <button id="submitButton" type="button" class="btn btn-primary" onclick="addTask(@Model)">@Localizer["SubmitBtnTitle"]</button>
+            <button id="addTaskButton" type="button" class="btn btn-primary" onclick="addTask(@Model.Id)">
+                @Localizer["SubmitBtnTitle"]
+            </button>
         </div>
     </div>
 </div>

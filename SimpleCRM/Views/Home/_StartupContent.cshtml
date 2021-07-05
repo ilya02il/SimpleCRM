@@ -6,13 +6,20 @@
 <div class="row">
     <div class="col-lg-8">
         <div class="common-info">
-            <h2>Общая информация</h2>
+            <h2>@Localizer["CommonInfoTitle1"]</h2>
             <div class="common-info__info">
-                Общее количество задач: @Model.Count <br>
-                Суммарное время выполнения: @Model.Sum(task => task.ExecutionTime.Days) дн. @Model.Sum(task => task.ExecutionTime.Hours) час.<br>
-                Суммарная плановые трудозатраты: @Model.Sum(task => task.PlannedIntensity) чел./час
+                @Localizer["CommonInfoTasksAmount"] @Model.Count <br>
+                @{
+                    var commonExecutionTime = new TimeSpan();
+
+                    commonExecutionTime = Model.Aggregate(commonExecutionTime, (current, taskModel) => current + taskModel.ExecutionTime);
+
+                    <div>@Localizer["CommonInfoSumExecutionTime"] @commonExecutionTime.Days @Localizer["Day"] @commonExecutionTime.Hours @Localizer["Hour"] @commonExecutionTime.Minutes @Localizer["Minutes"]</div>
+                }
+
+                @Localizer["CommonInfoSumIntensity"] @Model.Sum(task => task.PlannedIntensity) @Localizer["Intensity"]
             </div>
-            <h2>Список задач</h2>
+            <h2>@Localizer["CommonInfoTitle2"]</h2>
         </div>
     </div>
 </div>

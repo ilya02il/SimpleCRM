@@ -9,7 +9,25 @@
             <h2>@Localizer["CommonInfoTitle1"]</h2>
             <div class="common-info__info">
                 @Localizer["CommonInfoName"] @Model.Name<br>
-                @Localizer["CommonInfoStatus"] @Model.State.Status<br>
+                @Localizer["CommonInfoStatus"]
+                @{
+                    @switch (Model.StateId)
+                    {
+                        case 1:
+                            <td>@Localizer["StatusTd1"]</td>
+                            break;
+                        case 2:
+                            <td>@Localizer["StatusTd2"]</td>
+                            break;
+                        case 3:
+                            <td>@Localizer["StatusTd3"]</td>
+                            break;
+                        case 4:
+                            <td>@Localizer["StatusTd4"]</td>
+                            break;
+                    }
+                }
+                <br/>
                 @Localizer["CommonInfoExecutors"] @Model.Executors<br>
                 @Localizer["CommonInfoIntensity"] @Model.Subtasks.Aggregate(Model.PlannedIntensity, (current, subtask) => current + subtask.PlannedIntensity)<br>
                 @Localizer["CommonInfoExecutionTime"]
@@ -38,9 +56,9 @@
             <h2>@Localizer["CommonInfoTitle2"]</h2>
         </div>
         <div class="col-lg-4">
-            <button class="btn btn-primary m-2 float-right" data-toggle="modal" data-target="#addTaskModal" data-whatever="@Localizer["AddSubtaskBtnData"]">@Localizer["AddSubtaskBtnTitle"]</button>
+            <button class="btn btn-primary m-2 float-right" data-toggle="modal" data-target="#addSubtaskModal" data-whatever="@Localizer["AddSubtaskBtnData"]">@Localizer["AddSubtaskBtnTitle"]</button>
             <div id="addSubtaskModal" class="modal fade">
-                @await Html.PartialAsync("_AddTaskModal", Model.Id)
+                @await Html.PartialAsync("_AddSubtaskModal", Model)
             </div>
         </div>
     </div>

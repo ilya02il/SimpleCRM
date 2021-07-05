@@ -32,7 +32,6 @@
 }
 
 .side-panel {
-    width: 20%;
     min-width: 250px;
     background-color: #FFF;
     font-size: 24px;
@@ -84,20 +83,17 @@ td, th {
     text-align: center
 }
 
-/* Remove default bullets */
 ul, #myUL {
     list-style-type: none
 }
 
-/* Remove margins and padding from the parent ul */
 #myUL {
     padding: 0
 }
 
-/* Style the caret/arrow */
 .caret {
     cursor: pointer;
-    user-select: none /* Prevent text selection */
+    user-select: none
 }
 
 .caret-empty {
@@ -106,7 +102,6 @@ ul, #myUL {
     margin-left: 30px
 }
 
-/* Create the caret/arrow with a unicode, and style it */
 .caret:before {
     content: url("../images/arrow.png");
     vertical-align: middle;
@@ -114,19 +109,15 @@ ul, #myUL {
     margin-right: 6px
     }
 
-/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
 .caret-down:before {
-    /*content: url("../images/minus.png");*/
     transform: rotate(90deg);
     vertical-align: middle
 }
 
-/* Hide the nested list */
 .nested {
     display: none
 }
 
-/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
 .active {
     display: block
 }
